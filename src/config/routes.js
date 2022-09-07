@@ -9,6 +9,7 @@ const userController = require('../api/controllers/userController')
 const userLogin = require('../api/middlewares/users/userLogin')
 
 router.get('/hello', userController.hello)
+router.post('/create-user', userController.create)
 
 // router.post('/login', userController.login)
 

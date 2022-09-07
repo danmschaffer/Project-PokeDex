@@ -1,6 +1,6 @@
 // C - CONTROLLER
 
-// const User = require('../models/users')
+const User = require('../models/users')
 // const Badge = require('../models/badges')
 // const userTypesEnum = require('../common/enums/userTypes')
 
@@ -21,6 +21,19 @@ exports.hello = async function (req, res, next) {
   res.send({ success: true, res: 'Mensagem enviada com sucesso!', status: 200 })
 }
 
+exports.create = async function (req, res, next) {
+
+  let user = new User({
+    email: req.body.email,
+    password: req.body.password,
+    name: req.body.name,
+  })
+
+  const userCreated = await user.save()
+
+  if (userCreated) res.send({ success: true, res: 'Usuário cadastrado com sucesso!', status: 200 })
+
+}
 
 // exports.login = async function (req, res, next) {
 
