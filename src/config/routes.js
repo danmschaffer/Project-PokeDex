@@ -8,8 +8,8 @@ const userController = require('../api/controllers/userController')
 // const userTypesEnum = require('../api/common/enums/userTypes')
 const userLogin = require('../api/middlewares/users/userLogin')
 
-router.get('/hello', userController.hello)
-router.post('/create-user', userController.create)
+router.post('/usertest1', userController.usertest1)
+router.get('/findtrainer', userController.findtrainer)
 
 // router.post('/login', userController.login)
 

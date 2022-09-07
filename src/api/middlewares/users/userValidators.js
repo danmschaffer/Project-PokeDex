@@ -6,12 +6,12 @@ exports.userValidators = [
     .isEmail()
     .custom((value, { req }) => {
       return new Promise((resolve, reject) => {
-        User.findOne({ email: req.body.email }, function (err, user) {
+        User.findOne(function (err, name) {
           if (err) {
             reject(new Error('Server Error'))
           }
           if (!!user) {
-            reject(new Error(`O usuário já existe no banco de dados! Status: ${409}`))
+            reject(new Error(`Already registered! Status: ${409}`))
           }
           resolve(true)
 
@@ -21,7 +21,7 @@ exports.userValidators = [
   check('password').isLength({ min: 1, max: 30 }),
   check('name').isLength({ min: 2, max: 100 }),
   check('birthDay').isDate().notEmpty(),
-  check('userType').isString().notEmpty(),
+  check('pokemon').isString().notEmpty(),
   check('badges').isArray(),
   check('totalCoins').isFloat().notEmpty(),
   (req, res, next) => {

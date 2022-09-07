@@ -1,3 +1,3 @@
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
-module.exports = mongoose.connect('mongodb://localhost/pokedex', { useNewUrlParser: true })
+module.exports = mongoose.connect('mongodb://localhost/exact_school', { useNewUrlParser: true })

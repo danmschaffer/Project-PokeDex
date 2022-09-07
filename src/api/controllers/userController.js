@@ -1,6 +1,6 @@
 // C - CONTROLLER
 
-const User = require('../models/users')
+// const User = require('../models/users')
 // const Badge = require('../models/badges')
 // const userTypesEnum = require('../common/enums/userTypes')
 
@@ -18,23 +18,37 @@ exports.hello = async function (req, res, next) {
 
   console.log('Hello World')
 
-  res.send({ success: true, res: 'Mensagem enviada com sucesso!', status: 200 })
+  res.send({ success: true, res: 'Sucess!', status: 200 })
 }
 
-exports.create = async function (req, res, next) {
+exports.usertest1 = async function(req, res, next) {
+  let user = CreateUser ({
+         name: req.body.name,
+         password: encryptedHashPassword,
+         birthDay: req.body.birthDay,
+         firstpokemon: req.body.firstpokemon,
+         badges: req.body.badges,
+         totalCoins: req.body.totalCoins,
+         createdAt: new Date().toISOString(),
+         updatedAt: new Date().toISOString()
+       })
+    
+       const userCreated = await user.save()
+    
+       if (userCreated) res.send({ success: true, res: 'User created!', status: 200 })
+     }
 
-  let user = new User({
-    email: req.body.email,
-    password: req.body.password,
-    name: req.body.name,
-  })
+exports.findtrainer = async function(req,res, next) {
 
-  const userCreated = await user.save()
+  const finduser = await user.findOne({ name: req.body.name})
 
-  if (userCreated) res.send({ success: true, res: 'Usuário cadastrado com sucesso!', status: 200 })
-
+  if (!user) {
+         const error = new UnanthorizedError()
+         error.httpStatusCode = 401
+         res.status(error.httpStatusCode).json({ success: false, res: 'Authentication Failed', status: error.httpStatusCode })
+         return next(error)
+       }
 }
-
 // exports.login = async function (req, res, next) {
 
 //   const user = await User.findOne({ email: req.body.email })

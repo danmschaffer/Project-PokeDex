@@ -11,12 +11,12 @@ const userLogin = (userPermissions) => (req, res, next) => {
     req.authUser = decode
     
     if (!(userPermissions.some(userPermission => userPermission === req.authUser.userType))){
-      return res.status(401).send({ success: false, res: 'Sem permissão', status: 401 })
+      return res.status(401).send({ success: false, res: 'Without permission', status: 401 })
     }
     next()
   } catch (error) {
     
-    return res.status(401).send({ success: false, res: 'Falha na autenticação', status: 401 })
+    return res.status(401).send({ success: false, res: 'Authentication failed', status: 401 })
 
   }
 }
