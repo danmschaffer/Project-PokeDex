@@ -1,54 +1,92 @@
 // C - CONTROLLER
 
-// const User = require('../models/users')
-// const Badge = require('../models/badges')
+const User = require("../models/users");
 // const userTypesEnum = require('../common/enums/userTypes')
 
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-const NotFoundError = require('../common/errors/NotFound')
-const UnanthorizedError = require('../common/errors/Unanthorized')
-const InvalidOperationError = require('../common/errors/InvalidOperation')
-const ConflictError = require('../common/errors/Conflict')
+const NotFoundError = require("../common/errors/NotFound");
+const UnanthorizedError = require("../common/errors/Unanthorized");
+const InvalidOperationError = require("../common/errors/InvalidOperation");
+const ConflictError = require("../common/errors/Conflict");
 
-exports.hello = async function (req, res, next) {
+exports.create = async function (req, res, next) {
+  let user = new User({
+    name: req.body.name,
+    password: "teste1234",
+    birthDay: req.body.birthDay,
+    firstPokemon: req.body.firstPokemon,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  });
 
-  console.log('req.body:', req.body)
+  const userCreated = await user.save();
 
-  console.log('Hello World')
+  if (userCreated)
+    res.send({ success: true, res: "User created!", status: 200 });
+};
 
-  res.send({ success: true, res: 'Sucess!', status: 200 })
-}
-
-exports.usertest1 = async function(req, res, next) {
-  let user = CreateUser ({
-         name: req.body.name,
-         password: encryptedHashPassword,
-         birthDay: req.body.birthDay,
-         firstpokemon: req.body.firstpokemon,
-         badges: req.body.badges,
-         totalCoins: req.body.totalCoins,
-         createdAt: new Date().toISOString(),
-         updatedAt: new Date().toISOString()
-       })
-    
-       const userCreated = await user.save()
-    
-       if (userCreated) res.send({ success: true, res: 'User created!', status: 200 })
-     }
-
-exports.findtrainer = async function(req,res, next) {
-
-  const finduser = await user.findOne({ name: req.body.name})
+exports.getTrainer = async function (req, res, next) {
+  console.log('filters: ', req.query)
+  console.log('filters: ', req.body)
+  const user = await User.findOne({ name: req.body.name });
 
   if (!user) {
-         const error = new UnanthorizedError()
-         error.httpStatusCode = 401
-         res.status(error.httpStatusCode).json({ success: false, res: 'Authentication Failed', status: error.httpStatusCode })
-         return next(error)
+    const error = new UnanthorizedError();
+    error.httpStatusCode = 401;
+    res
+      .status(error.httpStatusCode)
+      .json({
+        success: false,
+        res: "Authentication Failed",
+        status: error.httpStatusCode,
+      });
+    return next(error);
+  }
+  else {
+    res.send({ success: true, res: user, status: 200 });
+  }
+};
+
+exports.getallTrainers = async function (req, res, next) {
+
+     let filters = {}, nameToFilter
+
+     if (!!req.query.name) {
+       nameToFilter = req.query.name ? req.query.name : ''
+       filters.name = {
+         $regex: '.*' + nameToFilter + '.*'
        }
-}
+     }
+
+const users = await User.find(filters, { password: 0 }).limit(10).skip(req.query.skip)
+
+   res.send(users || [])
+ }
+
+ exports.update = async function (req, res, next) {
+
+   let body = req.body
+
+   if (!(req.authUser.userType === userTypesEnum.ADMIN || req.authUser.id === req.params.id)){
+     const error = new UnanthorizedError()
+     error.httpStatusCode = 401
+     res.status(401).send({ sucess: false, res: 'No permission', status: error.httpStatusCode })
+     return next(error)
+   }
+
+   const user = await User.findByIdAndUpdate(req.params.id, { $set: body })
+
+   if (!user) {
+     const error = new NotFoundError()
+     error.httpStatusCode = 404
+     res.status(error.httpStatusCode).json({ success: false, res: 'User not found', status: error.httpStatusCode })
+     return next(error)
+   }
+
+   if (user) res.send({ success: true, res: 'User updated!', status: 200 })
+ }
 // exports.login = async function (req, res, next) {
 
 //   const user = await User.findOne({ email: req.body.email })
@@ -150,7 +188,7 @@ exports.findtrainer = async function(req,res, next) {
 //   let body = user
 
 //   const userResponse = await User.findByIdAndUpdate(req.params.id, { $set: body })
-  
+
 //   if (userResponse) res.send({ success: true, res: 'Medalha do usuário comprada com sucesso!', status: 200 })
 // }
 
@@ -269,4 +307,3 @@ exports.findtrainer = async function(req,res, next) {
 
 //   if (value) res.json({ value })
 // }
-

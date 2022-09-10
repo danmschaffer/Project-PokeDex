@@ -6,10 +6,12 @@ const router = express.Router()
 const userController = require('../api/controllers/userController')
 // const userValidators = require('../api/middlewares/users/userValidators')
 // const userTypesEnum = require('../api/common/enums/userTypes')
-const userLogin = require('../api/middlewares/users/userLogin')
+// const userLogin = require('../api/middlewares/users/userLogin')
 
-router.post('/usertest1', userController.usertest1)
-router.get('/findtrainer', userController.findtrainer)
+router.post('/create', userController.create)
+router.get('/get-trainer', userController.getTrainer)
+router.get('/get-all-trainers', userController.getallTrainers)
+router.post('/update', userController.update )
 
 // router.post('/login', userController.login)
 

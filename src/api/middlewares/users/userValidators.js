@@ -22,7 +22,6 @@ exports.userValidators = [
   check('name').isLength({ min: 2, max: 100 }),
   check('birthDay').isDate().notEmpty(),
   check('pokemon').isString().notEmpty(),
-  check('badges').isArray(),
   check('totalCoins').isFloat().notEmpty(),
   (req, res, next) => {
     const errors = validationResult(req)
