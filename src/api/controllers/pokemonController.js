@@ -1,33 +1,32 @@
 // C - CONTROLLER
 
-const User = require("../models/users");
+const Pokemon = require("../models/pokemons");
 // const userTypesEnum = require('../common/enums/userTypes')
-
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 const NotFoundError = require("../common/errors/NotFound");
 const UnanthorizedError = require("../common/errors/Unanthorized");
 const InvalidOperationError = require("../common/errors/InvalidOperation");
 const ConflictError = require("../common/errors/Conflict");
 
-exports.create = async function (req, res, next) {
-  let user = new User({
-    name: req.body.name,
-    password: "teste1234",
+exports.createPokemon = async function (req, res, next) {
+  let pokemon = new Pokemon({
+    pokemonName: req.body.pokemonName,
+    typePokemon: req.body.typePokemon,
     birthDay: req.body.birthDay,
-    Pokemon: req.body.Pokemon,
+    Level: req.body.level,
+    HP: req.body.hp,
+    rare: req.body.rare,
+    evolutionByStone : req.evolutionByStone,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
+  const pokemonCreated = await pokemon.save();
 
-  const userCreated = await user.save();
-
-  if (userCreated)
-    res.send({ success: true, res: "User created!", status: 200 });
+  if (pokemonCreated)
+    res.send({ success: true, res: "Pokemon created!", status: 200 });
 };
 
-exports.getTrainer = async function (req, res, next) {
+/* exports.getTrainer = async function (req, res, next) {
   console.log("filters: ", req.query);
   console.log("filters: ", req.body);
   const user = await User.findOne({ name: req.body.name });
@@ -336,4 +335,4 @@ exports.update = async function (req, res, next) {
 //   if (!value) res.json({ success: false, res: 'Não existem usuários para serem contabilizados', status: 404 })
 
 //   if (value) res.json({ value })
-// }
+// }*/

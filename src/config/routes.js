@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router()
 
 const userController = require('../api/controllers/userController')
+const pokemonController = require('../api/controllers/pokemonController')
 // const userValidators = require('../api/middlewares/users/userValidators')
 // const userTypesEnum = require('../api/common/enums/userTypes')
 // const userLogin = require('../api/middlewares/users/userLogin')
@@ -12,6 +13,8 @@ router.post('/create', userController.create)
 router.get('/get-trainer', userController.getTrainer)
 router.get('/get-all-trainers', userController.getallTrainers)
 router.post('/update', userController.update )
+router.delete('/delete/:id', userController.delete )
+router.post('/create-pokemon', pokemonController.createPokemon)
 
 // router.post('/login', userController.login)
 
