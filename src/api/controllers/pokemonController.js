@@ -13,10 +13,10 @@ exports.createPokemon = async function (req, res, next) {
     pokemonName: req.body.pokemonName,
     typePokemon: req.body.typePokemon,
     birthDay: req.body.birthDay,
-    Level: req.body.level,
-    HP: req.body.hp,
+    level: req.body.level,
+    hp: req.body.hp,
     rare: req.body.rare,
-    evolutionByStone : req.evolutionByStone,
+    evolutionByStone : req.body.evolutionByStone,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });

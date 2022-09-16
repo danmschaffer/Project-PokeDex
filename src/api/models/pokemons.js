@@ -12,8 +12,8 @@ const pokemonDataSchema = new mongoose.Schema(
       required: [true, "Insert the name!"],
     },
     birthDay: { type: Date, required: [true, "Insert the date of birth!"] },
-    Level: { type: Number, required: [true, "Insert the level!"] },
-    HP: { type: Number, required: [true, "Insert the HP!"] },
+    level: { type: Number, required: [true, "Insert the level!"] },
+    hp: { type: Number, required: [true, "Insert the HP!"] },
     typePokemon: {
       type: String,
       uppercase: true,
