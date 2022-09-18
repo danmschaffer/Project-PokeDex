@@ -26,6 +26,77 @@ exports.createPokemon = async function (req, res, next) {
     res.send({ success: true, res: "Pokemon created!", status: 200 });
 };
 
+exports.getPokemon = async function (req, res, next) {
+  console.log("filters: ", req.query);
+  console.log("filters: ", req.body);
+  const pokemon = await Pokemon.findOne({ name: req.body.pokemonName });
+
+  /*if (!pokemon) {
+    const error = new UnanthorizedError();
+    error.httpStatusCode = 401;
+    res.status(error.httpStatusCode).json({
+      success: false,
+      res: "Authentication Failed",
+      status: error.httpStatusCode,
+    });
+    return next(error);
+  } else {*/
+    res.send({ success: true, res: pokemon, status: 200 })
+  }
+
+exports.getallPokemons = async function (req, res, next) {
+  let filters = {},
+    pokemonNameToFilter;
+
+  if (!!req.query.name) {
+    pokemonNameToFilter = req.query.pokemonName ? req.query.pokemonName : "";
+    filters.name = {
+      $regex: ".*" + nameToFilter + ".*",
+    };
+  }
+
+  const pokemons = await Pokemon.find(filters, { password: 0 })
+    .limit(10)
+    .skip(req.query.skip);
+
+  res.send(pokemons || []);
+};
+
+exports.updatePokemon = async function (req, res, next) {
+  let body = req.body;
+
+  const pokemon = await Pokemon.findByIdAndUpdate(req.params.id, { $set: body });
+
+  if (!pokemon) {
+    const error = new NotFoundError();
+    error.httpStatusCode = 404;
+    res
+      .status(error.httpStatusCode)
+      .json({
+        success: false,
+        res: "Pokemon not found",
+        status: error.httpStatusCode,
+      });
+    return next(error);
+  }
+
+  if (user) res.send({ success: true, res: "Pokemon updated!", status: 200 });
+};
+
+
+ exports.deletePokemon = async function (req, res, next) {
+
+   const pokemon = await Pokemon.findByIdAndRemove(req.params.id)
+
+   if (!pokemon) {
+     const error = new NotFoundError()
+     error.httpStatusCode = 404
+     res.status(error.httpStatusCode).json({ success: false, res: 'Pokemon not Found', status: error.httpStatusCode })
+     return next(error)
+   }
+// Process to request a second confirmation to delete, it would be great 
+   if (user) res.send({ success: true, res: 'Pokemon removed!', status: 200 })
+ }
 /* exports.getTrainer = async function (req, res, next) {
   console.log("filters: ", req.query);
   console.log("filters: ", req.body);

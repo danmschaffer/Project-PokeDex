@@ -9,12 +9,21 @@ const pokemonController = require('../api/controllers/pokemonController')
 // const userTypesEnum = require('../api/common/enums/userTypes')
 // const userLogin = require('../api/middlewares/users/userLogin')
 
+
+// USER PART //
 router.post('/create', userController.create)
 router.get('/get-trainer', userController.getTrainer)
 router.get('/get-all-trainers', userController.getallTrainers)
 router.post('/update', userController.update )
 router.delete('/delete/:id', userController.delete )
+
+// POKEMON PART //
 router.post('/create-pokemon', pokemonController.createPokemon)
+router.get('/get-pokemon', pokemonController.getPokemon)
+router.get('/get-all-pokemons', pokemonController.getallPokemons)
+router.post('/updatePokemon', pokemonController.updatePokemon )
+router.delete('/delete/:id', pokemonController.deletePokemon )
+
 
 // router.post('/login', userController.login)
 
