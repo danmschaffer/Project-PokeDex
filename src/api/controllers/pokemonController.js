@@ -8,6 +8,8 @@ const UnanthorizedError = require("../common/errors/Unanthorized");
 const InvalidOperationError = require("../common/errors/InvalidOperation");
 const ConflictError = require("../common/errors/Conflict");
 
+const getPokemonsData = require("../external-services/excel")
+
 exports.createPokemon = async function (req, res, next) {
   let pokemon = new Pokemon({
     pokemonName: req.body.pokemonName,
@@ -16,7 +18,7 @@ exports.createPokemon = async function (req, res, next) {
     level: req.body.level,
     hp: req.body.hp,
     rare: req.body.rare,
-    evolutionByStone : req.body.evolutionByStone,
+    evolutionByStone: req.body.evolutionByStone,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
@@ -29,7 +31,7 @@ exports.createPokemon = async function (req, res, next) {
 exports.getPokemon = async function (req, res, next) {
   console.log("filters: ", req.query);
   console.log("filters: ", req.body);
-  const pokemon = await Pokemon.findOne({ name: req.body.pokemonName });
+  const pokemon = await Pokemon.findOne({ pokemonName: req.body.pokemonName });
 
   /*if (!pokemon) {
     const error = new UnanthorizedError();
@@ -41,10 +43,10 @@ exports.getPokemon = async function (req, res, next) {
     });
     return next(error);
   } else {*/
-    res.send({ success: true, res: pokemon, status: 200 })
-  }
+  res.send({ success: true, res: pokemon, status: 200 })
+}
 
-exports.getallPokemons = async function (req, res, next) {
+/*exports.getallPokemons = async function (req, res, next) {
   let filters = {},
     pokemonNameToFilter;
 
@@ -60,7 +62,7 @@ exports.getallPokemons = async function (req, res, next) {
     .skip(req.query.skip);
 
   res.send(pokemons || []);
-};
+};*/
 
 exports.updatePokemon = async function (req, res, next) {
   let body = req.body;
@@ -80,23 +82,30 @@ exports.updatePokemon = async function (req, res, next) {
     return next(error);
   }
 
-  if (user) res.send({ success: true, res: "Pokemon updated!", status: 200 });
+  if (pokemon) res.send({ success: true, res: "Pokemon updated!", status: 200 });
 };
 
 
- exports.deletePokemon = async function (req, res, next) {
+exports.deletePokemon = async function (req, res, next) {
 
-   const pokemon = await Pokemon.findByIdAndRemove(req.params.id)
+  const pokemon = await Pokemon.findByIdAndRemove(req.params.id)
 
-   if (!pokemon) {
-     const error = new NotFoundError()
-     error.httpStatusCode = 404
-     res.status(error.httpStatusCode).json({ success: false, res: 'Pokemon not Found', status: error.httpStatusCode })
-     return next(error)
-   }
-// Process to request a second confirmation to delete, it would be great 
-   if (user) res.send({ success: true, res: 'Pokemon removed!', status: 200 })
- }
+  if (!pokemon) {
+    const error = new NotFoundError()
+    error.httpStatusCode = 404
+    res.status(error.httpStatusCode).json({ success: false, res: 'Pokemon not Found', status: error.httpStatusCode })
+    return next(error)
+  }
+  // Process to request a second confirmation to delete, it would be great 
+  if (pokemon) res.send({ success: true, res: 'Pokemon removed!', status: 200 })
+}
+
+exports.getAllPokemons = async function (req, res, next) {
+
+  const pokemons = await getPokemonsData()
+ 
+  res.send(pokemons || []);
+};
 /* exports.getTrainer = async function (req, res, next) {
   console.log("filters: ", req.query);
   console.log("filters: ", req.body);

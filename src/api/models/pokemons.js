@@ -17,7 +17,7 @@ const pokemonDataSchema = new mongoose.Schema(
     typePokemon: {
       type: String,
       uppercase: true,
-      enum: [
+      /* enum: [
         typePokemonEnum.FIRE,
         typePokemonEnum.WATER,
         typePokemonEnum.PLANT,
@@ -28,14 +28,28 @@ const pokemonDataSchema = new mongoose.Schema(
         typePokemonEnum.DARK,
         typePokemonEnum.BUG,
       ],
-      required: [true, "Insert your pokemon!"],
+      required: [true, "Insert your pokemon!"],*/
     },
     rare: { type: String, required: [true, "Insert rarity !"] },
     evolutionByStone: { type: Boolean, required: [true, "Can have a evolution by stone!?"] },
-    createdAt: { type: Date, required: true },
-    updatedAt: { type: Date, required: true },
+    typeStone: {
+      type: String,
+      uppercase: true,
+      /*enum: [
+          typeStoneEnum.FIRE_STONE,
+          typeStoneEnum.WATER_STONE,
+          typeStoneEnum.PLANT_STONE,
+          typeStoneEnum.THUNDER_STONE,
+          typeStoneEnum.MOON_STONE,
+          typeStoneEnum.NO_EVOLUTION,
+         ],
+      required: [true, "Insert pokemon's stone"],*/
+    },
+  createdAt: { type: Date, required: true },
+  updatedAt: { type: Date, required: true },
   },
-  { collection: "pokemons" }
+{ collection: "pokemons" }
 );
 
 module.exports = mongoose.model("PokemonData", pokemonDataSchema);
+

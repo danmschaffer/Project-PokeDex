@@ -14,15 +14,16 @@ const pokemonController = require('../api/controllers/pokemonController')
 router.post('/create', userController.create)
 router.get('/get-trainer', userController.getTrainer)
 router.get('/get-all-trainers', userController.getallTrainers)
-router.post('/update', userController.update )
+router.put('/update/:id', userController.update )
 router.delete('/delete/:id', userController.delete )
 
 // POKEMON PART //
 router.post('/create-pokemon', pokemonController.createPokemon)
+//router.post('/create-pokemons', pokemonController.createPokemons)
 router.get('/get-pokemon', pokemonController.getPokemon)
-router.get('/get-all-pokemons', pokemonController.getallPokemons)
-router.post('/updatePokemon', pokemonController.updatePokemon )
-router.delete('/delete/:id', pokemonController.deletePokemon )
+router.get('/get-all-pokemons', pokemonController.getAllPokemons)
+router.put('/update-pokemon/:id', pokemonController.updatePokemon )
+router.delete('/delete-pokemon/:id', pokemonController.deletePokemon )
 
 
 // router.post('/login', userController.login)
@@ -79,6 +80,5 @@ router.delete('/delete/:id', pokemonController.deletePokemon )
 // router.put('/quizzes/:id/update', userLogin([userTypesEnum.ADMIN, userTypesEnum.TEACHER]), quizController.update)
 // router.delete('/quizzes/:id/delete', userLogin([userTypesEnum.ADMIN]), quizController.delete)
 
-// Tal controller e tais rotas: (padrão)
 
 module.exports = router
